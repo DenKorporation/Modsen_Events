@@ -45,7 +45,7 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EventUser",
+                name: "EventUsers",
                 columns: table => new
                 {
                     EventId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -54,15 +54,15 @@ namespace Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventUser", x => new { x.EventId, x.UserId });
+                    table.PrimaryKey("PK_EventUsers", x => new { x.EventId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_EventUser_Events_EventId",
+                        name: "FK_EventUsers_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EventUser_Users_UserId",
+                        name: "FK_EventUsers_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -70,8 +70,8 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventUser_UserId",
-                table: "EventUser",
+                name: "IX_EventUsers_UserId",
+                table: "EventUsers",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -85,7 +85,7 @@ namespace Infrastructure.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EventUser");
+                name: "EventUsers");
 
             migrationBuilder.DropTable(
                 name: "Events");
