@@ -8,6 +8,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<Event> Events { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<EventUser> EventUsers { get; set; }
     
     protected override void OnModelCreating(ModelBuilder builder)
     {

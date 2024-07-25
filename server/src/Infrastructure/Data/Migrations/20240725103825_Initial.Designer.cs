@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240719191701_Initial")]
+    [Migration("20240725103825_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -80,7 +80,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("EventUser");
+                    b.ToTable("EventUsers", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>

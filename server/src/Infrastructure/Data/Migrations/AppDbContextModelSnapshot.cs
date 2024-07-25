@@ -77,7 +77,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("EventUser");
+                    b.ToTable("EventUsers", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
