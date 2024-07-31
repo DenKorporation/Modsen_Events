@@ -13,6 +13,6 @@ public class EventRepository(AppDbContext dbContext) : Repository<Event>(dbConte
     {
         return await _dbContext.Events
             .AsNoTracking()
-            .FirstOrDefaultAsync(e => e.Name == name, cancellationToken);
+            .FirstOrDefaultAsync(e => e.Name.ToLower() == name.ToLower(), cancellationToken);
     }
 }
