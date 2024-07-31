@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240725103825_Initial")]
+    [Migration("20240729105228_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -52,7 +52,10 @@ namespace Infrastructure.Data.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
-                    b.Property<string>("ImagePath")
+                    b.Property<string>("ImageStoragePath")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")

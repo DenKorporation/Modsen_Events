@@ -22,7 +22,8 @@ namespace Infrastructure.Data.Migrations
                     Address = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Category = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Capacity = table.Column<long>(type: "bigint", nullable: false),
-                    ImagePath = table.Column<string>(type: "text", nullable: true)
+                    ImageStoragePath = table.Column<string>(type: "text", nullable: true),
+                    ImageUrl = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {

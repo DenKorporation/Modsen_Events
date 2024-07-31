@@ -96,7 +96,8 @@ public class AppDbContextInitializer(ILogger<AppDbContextInitializer> logger, Ap
                 Address = "Test Address",
                 Category = "Test Category",
                 Capacity = 100,
-                ImagePath = "Test Image Path",
+                ImageStoragePath = "Previews/C5E96700-BA55-497D-99F4-6AD9409D19B1/preview.jpg",
+                ImageUrl = "https://qkmmxxtecbgyplwbwzxr.supabase.co/storage/v1/object/public/Previews/C5E96700-BA55-497D-99F4-6AD9409D19B1/preview.jpg",
                 EventUsers =
                 [
                     new EventUser

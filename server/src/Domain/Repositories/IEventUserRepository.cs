@@ -2,7 +2,7 @@ using Domain.Entities;
 
 namespace Domain.Repositories;
 
-public interface IEventUserRepository : IRepository<EventUser>
+public interface IEventUserRepository
 {
     public IQueryable<User> GetAllUsersFromEvent(Guid eventId);
     public IQueryable<Event> GetAllEventsFromUser(Guid userId);

@@ -10,8 +10,8 @@ public class Event
     // maybe it makes sense to do data type / enum instead of string
     public string Category { get; set; }
     public uint Capacity { get; set; }
-    // url or local storage path
-    public string? ImagePath { get; set; }
+    public string? ImageStoragePath { get; set; }
+    public string? ImageUrl { get; set; }
     public ICollection<User> Users { get; set; } = null!;
     public ICollection<EventUser> EventUsers { get; set; } = null!;
 }
