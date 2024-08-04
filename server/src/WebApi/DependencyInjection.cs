@@ -8,6 +8,21 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.AddControllers();
+        
+        services.AddAuthentication()
+            .AddJwtBearer(options =>
+            {
+                options.Authority = configuration.GetRequiredSection("Identity:Url").Value;
+                options.TokenValidationParameters.ValidateAudience = false;
+            });
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("ApiScope", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.RequireClaim("scope", "events");
+            });
+        });
 
         services.AddExceptionHandler<GlobalExceptionHandler>();
 

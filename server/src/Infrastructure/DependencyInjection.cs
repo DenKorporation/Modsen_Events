@@ -1,8 +1,11 @@
 using Application.Services;
+using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Infrastructure.Repositories;
 using Infrastructure.Supabase;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +20,17 @@ public static class DependencyInjection
     {
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("Database")));
+
+        services.AddIdentity<User, IdentityRole<Guid>>()
+            .AddEntityFrameworkStores<AppDbContext>();
+
+        services
+            .AddIdentityServer()
+            .AddDeveloperSigningCredential()
+            .AddInMemoryIdentityResources(Configuration.IdentityResources)
+            .AddInMemoryApiScopes(Configuration.ApiScopes)
+            .AddInMemoryClients(Configuration.Clients)
+            .AddAspNetIdentity<User>();
 
         services.AddScoped<AppDbContextInitializer>();
 

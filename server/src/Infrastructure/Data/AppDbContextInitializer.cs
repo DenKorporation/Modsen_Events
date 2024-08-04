@@ -1,5 +1,9 @@
 using System.Globalization;
+using System.Security.Claims;
+using Domain.Constants;
 using Domain.Entities;
+using IdentityModel;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,7 +25,11 @@ public static class InitializerExtensions
     }
 }
 
-public class AppDbContextInitializer(ILogger<AppDbContextInitializer> logger, AppDbContext context)
+public class AppDbContextInitializer(
+    ILogger<AppDbContextInitializer> logger,
+    AppDbContext context,
+    UserManager<User> userManager,
+    RoleManager<IdentityRole<Guid>> roleManager)
 {
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
@@ -51,12 +59,48 @@ public class AppDbContextInitializer(ILogger<AppDbContextInitializer> logger, Ap
 
     private async Task TrySeedAsync(CancellationToken cancellationToken = default)
     {
-        // Default users
-        if (!context.Users.Any())
+        if (!roleManager.Roles.Any())
         {
-            await context.Users.AddRangeAsync(GetPreconfiguredUsers(), cancellationToken);
+            foreach (var role in GetPreconfiguredRoles())
+            {
+                var result = await roleManager.CreateAsync(role);
+                if (!result.Succeeded)
+                {
+                    throw new Exception(result.Errors.First().Description);
+                }
+            }
+        }
 
-            await context.SaveChangesAsync(cancellationToken);
+        // Default users
+        if (!userManager.Users.Any())
+        {
+            foreach (var user in GetPreconfiguredUsers())
+            {
+                var result = await userManager.CreateAsync(user, "Pass123$");
+                if (!result.Succeeded)
+                {
+                    throw new Exception(result.Errors.First().Description);
+                }
+
+                result = await userManager.AddToRoleAsync(user, Roles.Administrator);
+                if (!result.Succeeded)
+                {
+                    throw new Exception(result.Errors.First().Description);
+                }
+
+                result = await userManager.AddClaimsAsync(user, new Claim[]
+                {
+                    new(JwtClaimTypes.GivenName, user.FirstName),
+                    new(JwtClaimTypes.FamilyName, user.LastName),
+                    new(JwtClaimTypes.Email, user.Email!),
+                    new(JwtClaimTypes.BirthDate, user.Birthday.ToShortDateString()),
+                    new(JwtClaimTypes.UpdatedAt, new DateTimeOffset(user.UpdatedAt).ToUnixTimeSeconds().ToString())
+                });
+                if (!result.Succeeded)
+                {
+                    throw new Exception(result.Errors.First().Description);
+                }
+            }
         }
 
         // Default data
@@ -66,6 +110,15 @@ public class AppDbContextInitializer(ILogger<AppDbContextInitializer> logger, Ap
 
             await context.SaveChangesAsync(cancellationToken);
         }
+    }
+
+    private static IEnumerable<IdentityRole<Guid>> GetPreconfiguredRoles()
+    {
+        return
+        [
+            new() { Name = Roles.Administrator },
+            new() { Name = Roles.Registered }
+        ];
     }
 
     private static IEnumerable<User> GetPreconfiguredUsers()
@@ -78,7 +131,9 @@ public class AppDbContextInitializer(ILogger<AppDbContextInitializer> logger, Ap
                 FirstName = "FirstName",
                 LastName = "LastName",
                 Birthday = DateOnly.ParseExact("2000-01-01", "yyyy-MM-dd"),
-                Email = "test@example.com"
+                Email = "test@example.com",
+                UserName = "test@example.com",
+                UpdatedAt = DateTime.UtcNow
             }
         ];
     }
@@ -96,8 +151,8 @@ public class AppDbContextInitializer(ILogger<AppDbContextInitializer> logger, Ap
                 Address = "Test Address",
                 Category = "Test Category",
                 Capacity = 100,
-                ImageStoragePath = "Previews/C5E96700-BA55-497D-99F4-6AD9409D19B1/preview.jpg",
-                ImageUrl = "https://qkmmxxtecbgyplwbwzxr.supabase.co/storage/v1/object/public/Previews/C5E96700-BA55-497D-99F4-6AD9409D19B1/preview.jpg",
+                ImageStoragePath = null,
+                ImageUrl = null,
                 EventUsers =
                 [
                     new EventUser

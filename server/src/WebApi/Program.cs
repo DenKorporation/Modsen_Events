@@ -21,6 +21,9 @@ if (app.Environment.IsDevelopment())
     await app.InitialiseDatabaseAsync();
 }
 
+app.UseIdentityServer();
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
