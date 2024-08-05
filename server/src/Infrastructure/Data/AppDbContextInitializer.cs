@@ -1,13 +1,17 @@
 using System.Globalization;
 using System.Security.Claims;
+using Application.Common.Extensions;
 using Domain.Constants;
 using Domain.Entities;
-using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Supabase.Storage;
+using Supabase.Storage.Interfaces;
+using Client = Supabase.Client;
 
 namespace Infrastructure.Data;
 
@@ -27,10 +31,15 @@ public static class InitializerExtensions
 
 public class AppDbContextInitializer(
     ILogger<AppDbContextInitializer> logger,
+    IConfiguration configuration,
     AppDbContext context,
     UserManager<User> userManager,
-    RoleManager<IdentityRole<Guid>> roleManager)
+    RoleManager<IdentityRole<Guid>> roleManager,
+    Client supabaseClient)
 {
+    private readonly IStorageClient<Bucket, FileObject> _storageClient = supabaseClient.Storage;
+    private readonly string _previewsBucket = configuration.GetRequiredSection("Storage:PreviewsBucket").Value!;
+
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
         try
@@ -88,14 +97,7 @@ public class AppDbContextInitializer(
                     throw new Exception(result.Errors.First().Description);
                 }
 
-                result = await userManager.AddClaimsAsync(user, new Claim[]
-                {
-                    new(JwtClaimTypes.GivenName, user.FirstName),
-                    new(JwtClaimTypes.FamilyName, user.LastName),
-                    new(JwtClaimTypes.Email, user.Email!),
-                    new(JwtClaimTypes.BirthDate, user.Birthday.ToShortDateString()),
-                    new(JwtClaimTypes.UpdatedAt, new DateTimeOffset(user.UpdatedAt).ToUnixTimeSeconds().ToString())
-                });
+                result = await userManager.AddClaimsAsync(user, user.ToClaims());
                 if (!result.Succeeded)
                 {
                     throw new Exception(result.Errors.First().Description);
@@ -106,6 +108,7 @@ public class AppDbContextInitializer(
         // Default data
         if (!context.Events.Any())
         {
+            await _storageClient.EmptyBucket(_previewsBucket);
             await context.Events.AddRangeAsync(GetPreconfiguredEvents(), cancellationToken);
 
             await context.SaveChangesAsync(cancellationToken);
@@ -131,8 +134,8 @@ public class AppDbContextInitializer(
                 FirstName = "FirstName",
                 LastName = "LastName",
                 Birthday = DateOnly.ParseExact("2000-01-01", "yyyy-MM-dd"),
-                Email = "test@example.com",
-                UserName = "test@example.com",
+                Email = "admin@example.com",
+                UserName = "admin@example.com",
                 UpdatedAt = DateTime.UtcNow
             }
         ];
