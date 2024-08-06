@@ -2,6 +2,7 @@ using Application;
 using Infrastructure;
 using Infrastructure.Data;
 using WebApi;
+using WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseIdentityServer();
+app.UseTokenVersionValidation();
 app.UseAuthorization();
 
 app.MapControllers();
