@@ -90,7 +90,7 @@ public class EventsController(ISender sender) : ControllerBase
 
     [Authorize(Policies.ModifyEvent)]
     [HttpPost("{eventId:guid}/preview")]
-    public async Task<IResult> UploadImageAsync([FromForm] IFormFile previewImage, Guid eventId,
+    public async Task<IResult> UploadImageAsync(IFormFile previewImage, Guid eventId,
         CancellationToken cancellationToken = default)
     {
         var result = await sender.Send(new UploadImageCommand(eventId, previewImage), cancellationToken);
@@ -100,7 +100,7 @@ public class EventsController(ISender sender) : ControllerBase
 
     [Authorize(Policies.ModifyEvent)]
     [HttpPut("{eventId:guid}/preview")]
-    public async Task<IResult> UpdateImageAsync([FromForm] IFormFile previewImage, Guid eventId,
+    public async Task<IResult> UpdateImageAsync(IFormFile previewImage, Guid eventId,
         CancellationToken cancellationToken = default)
     {
         var result = await sender.Send(new UpdateImageCommand(eventId, previewImage), cancellationToken);

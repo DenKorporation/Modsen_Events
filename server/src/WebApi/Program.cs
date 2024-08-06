@@ -17,7 +17,11 @@ app.UseExceptionHandler();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Events API v1");
+        options.OAuthClientId("angular");
+    });
 
     await app.InitialiseDatabaseAsync();
 }

@@ -1,13 +1,13 @@
 using System.Security.Claims;
+using Domain.Repositories;
 using IdentityModel;
-using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Middleware;
 
 public class TokenVersionValidationMiddleware(RequestDelegate next)
 {
-    public async Task InvokeAsync(HttpContext context, UnitOfWork unitOfWork)
+    public async Task InvokeAsync(HttpContext context, IUnitOfWork unitOfWork)
     {
         if (context.User.Identity is { IsAuthenticated: true })
         {
@@ -15,24 +15,34 @@ public class TokenVersionValidationMiddleware(RequestDelegate next)
             if (userId is not null)
             {
                 var user = await unitOfWork.UserRepository.GetByIdAsync(new Guid(userId));
-                if (user != null)
+                var errorCode = user is null ? "Token.UserDeleted" : null;
+                if (errorCode is null)
                 {
                     if (long.TryParse(context.User.FindFirst(JwtClaimTypes.UpdatedAt)?.Value, out var tokenUpdatedAt))
                     {
-                        var userUpdatedAt = new DateTimeOffset(user.UpdatedAt).ToUnixTimeSeconds();
+                        var userUpdatedAt = new DateTimeOffset(user!.UpdatedAt).ToUnixTimeSeconds();
                         if (userUpdatedAt > tokenUpdatedAt)
                         {
-                            context.Response.StatusCode = 498; // Invalid Token (unofficial error)
-                            var problemDetails = new ProblemDetails
-                            {
-                                Status = 498,
-                                Title = "Invalid Token",
-                                Extensions = { { "description", "Token expired, please reauthenticate." } }
-                            };
-                            await context.Response.WriteAsJsonAsync(problemDetails);
-                            return;
+                            errorCode = "Token.ExpiredData";
                         }
                     }
+                }
+
+                if (errorCode is not null)
+                {
+                    context.Response.StatusCode = 498; // Invalid Token (unofficial error)
+                    var problemDetails = new ProblemDetails
+                    {
+                        Status = 498,
+                        Title = "Invalid Token",
+                        Extensions =
+                        {
+                            { "code", errorCode },
+                            { "description", "Token expired, please reauthenticate." }
+                        }
+                    };
+                    await context.Response.WriteAsJsonAsync(problemDetails);
+                    return;
                 }
             }
         }

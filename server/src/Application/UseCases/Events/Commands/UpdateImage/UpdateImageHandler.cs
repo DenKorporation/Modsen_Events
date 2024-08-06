@@ -79,6 +79,6 @@ public class UpdateImageHandler(
     {
         var extension = Path.GetExtension(filename);
 
-        return $"{eventId}/preview{extension}";
+        return $"{eventId.ToString().ToUpper()}/preview{extension}";
     }
 }

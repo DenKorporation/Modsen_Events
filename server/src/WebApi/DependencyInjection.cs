@@ -3,6 +3,7 @@ using Domain.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using WebApi.Authorization.Handlers;
 using WebApi.Authorization.Requirements;
 using WebApi.Middleware;
@@ -41,8 +42,48 @@ public static class DependencyInjection
 
         services.AddProblemDetails();
 
+        var tokenUri = new Uri(configuration.GetRequiredSection("Identity:Url").Value + "/connect/token");
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo { Title = "Events API", Version = "v1" });
+            options.AddSecurityDefinition("OAuth2", new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.OAuth2,
+                Flows = new OpenApiOAuthFlows
+                {
+                    Password = new OpenApiOAuthFlow
+                    {
+                        RefreshUrl = tokenUri,
+                        TokenUrl = tokenUri,
+                        Scopes = new Dictionary<string, string>
+                        {
+                            { "openid", "openid" },
+                            { "profile", "profile" },
+                            { "events", "events " },
+                            { "offline_access", "offline_access " },
+                        }
+                    }
+                }
+            });
+
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "OAuth2"
+                        },
+                        Name = "Bearer",
+                        Scheme = "Bearer",
+                    },
+                    new string[] { }
+                }
+            });
+        });
 
         return services;
     }
