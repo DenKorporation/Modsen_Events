@@ -15,6 +15,16 @@ public static class ResultExtensions
             _ => throw new ArgumentOutOfRangeException()
         };
     }
+    
+    public static IResult ToAspResult(this Result result, IResult success)
+    {
+        return result switch
+        {
+            { IsFailed: true } => result.ToProblemDetail(),
+            { IsSuccess: true } => success,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
 
     public static IResult ToAspResult(this Result result, Func<IResult> success)
     {

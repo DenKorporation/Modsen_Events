@@ -11,6 +11,20 @@ public class UnregisterUserFromEventHandler(IUnitOfWork unitOfWork)
 {
     public async Task<Result> Handle(UnregisterUserFromEventCommand request, CancellationToken cancellationToken)
     {
+        var resultUser = await unitOfWork.UserRepository.GetByIdAsync(request.UserId, cancellationToken);
+
+        if (resultUser is null)
+        {
+            return new UserNotFoundError(message: $"User '{request.UserId}' not found");
+        }
+        
+        var resultEvent = await unitOfWork.EventRepository.GetByIdAsync(request.EventId, cancellationToken);
+
+        if (resultEvent is null)
+        {
+            return new EventNotFoundError(message: $"Event '{request.EventId}' not found");
+        }
+        
         var removeResult = await unitOfWork.EventUserRepository.RemoveUserFromEventAsync(
             request.UserId,
             request.EventId,

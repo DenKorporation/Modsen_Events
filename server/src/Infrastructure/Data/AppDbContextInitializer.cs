@@ -1,9 +1,17 @@
 using System.Globalization;
+using System.Security.Claims;
+using Application.Common.Extensions;
+using Domain.Constants;
 using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Supabase.Storage;
+using Supabase.Storage.Interfaces;
+using Client = Supabase.Client;
 
 namespace Infrastructure.Data;
 
@@ -21,8 +29,17 @@ public static class InitializerExtensions
     }
 }
 
-public class AppDbContextInitializer(ILogger<AppDbContextInitializer> logger, AppDbContext context)
+public class AppDbContextInitializer(
+    ILogger<AppDbContextInitializer> logger,
+    IConfiguration configuration,
+    AppDbContext context,
+    UserManager<User> userManager,
+    RoleManager<IdentityRole<Guid>> roleManager,
+    Client supabaseClient)
 {
+    private readonly IStorageClient<Bucket, FileObject> _storageClient = supabaseClient.Storage;
+    private readonly string _previewsBucket = configuration.GetRequiredSection("Storage:PreviewsBucket").Value!;
+
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
         try
@@ -51,21 +68,60 @@ public class AppDbContextInitializer(ILogger<AppDbContextInitializer> logger, Ap
 
     private async Task TrySeedAsync(CancellationToken cancellationToken = default)
     {
-        // Default users
-        if (!context.Users.Any())
+        if (!roleManager.Roles.Any())
         {
-            await context.Users.AddRangeAsync(GetPreconfiguredUsers(), cancellationToken);
+            foreach (var role in GetPreconfiguredRoles())
+            {
+                var result = await roleManager.CreateAsync(role);
+                if (!result.Succeeded)
+                {
+                    throw new Exception(result.Errors.First().Description);
+                }
+            }
+        }
 
-            await context.SaveChangesAsync(cancellationToken);
+        // Default users
+        if (!userManager.Users.Any())
+        {
+            foreach (var user in GetPreconfiguredUsers())
+            {
+                var result = await userManager.CreateAsync(user, "Pass123$");
+                if (!result.Succeeded)
+                {
+                    throw new Exception(result.Errors.First().Description);
+                }
+
+                result = await userManager.AddToRoleAsync(user, Roles.Administrator);
+                if (!result.Succeeded)
+                {
+                    throw new Exception(result.Errors.First().Description);
+                }
+
+                result = await userManager.AddClaimsAsync(user, user.ToClaims());
+                if (!result.Succeeded)
+                {
+                    throw new Exception(result.Errors.First().Description);
+                }
+            }
         }
 
         // Default data
         if (!context.Events.Any())
         {
+            await _storageClient.EmptyBucket(_previewsBucket);
             await context.Events.AddRangeAsync(GetPreconfiguredEvents(), cancellationToken);
 
             await context.SaveChangesAsync(cancellationToken);
         }
+    }
+
+    private static IEnumerable<IdentityRole<Guid>> GetPreconfiguredRoles()
+    {
+        return
+        [
+            new() { Name = Roles.Administrator },
+            new() { Name = Roles.Registered }
+        ];
     }
 
     private static IEnumerable<User> GetPreconfiguredUsers()
@@ -78,7 +134,9 @@ public class AppDbContextInitializer(ILogger<AppDbContextInitializer> logger, Ap
                 FirstName = "FirstName",
                 LastName = "LastName",
                 Birthday = DateOnly.ParseExact("2000-01-01", "yyyy-MM-dd"),
-                Email = "test@example.com"
+                Email = "admin@example.com",
+                UserName = "admin@example.com",
+                UpdatedAt = DateTime.UtcNow
             }
         ];
     }
@@ -96,8 +154,8 @@ public class AppDbContextInitializer(ILogger<AppDbContextInitializer> logger, Ap
                 Address = "Test Address",
                 Category = "Test Category",
                 Capacity = 100,
-                ImageStoragePath = "Previews/C5E96700-BA55-497D-99F4-6AD9409D19B1/preview.jpg",
-                ImageUrl = "https://qkmmxxtecbgyplwbwzxr.supabase.co/storage/v1/object/public/Previews/C5E96700-BA55-497D-99F4-6AD9409D19B1/preview.jpg",
+                ImageStoragePath = null,
+                ImageUrl = null,
                 EventUsers =
                 [
                     new EventUser
