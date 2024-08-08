@@ -21,7 +21,10 @@ export class UserService {
 
     const requestUrl = `${this.userApiUrl}?${params.join('&')}`;
 
-    return this.httpClient.get<PagedList<UserResponse>>(requestUrl);
+    return this.httpClient.get<PagedList<UserResponse>>(requestUrl).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => new Error(error.error.message ?? "Unknown error"));
+      }));
   }
 
   public getAllUserEvents(userId: string, pageNumber: number, pageSize: number): Observable<PagedList<UserEventResponse>> {

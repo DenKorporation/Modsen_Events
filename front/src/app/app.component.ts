@@ -52,9 +52,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.userInfoSubscription) {
-      this.isAuthSubscription.unsubscribe();
+      this.userInfoSubscription.unsubscribe();
     }
-    if (this.userInfoSubscription) {
+    if (this.isAuthSubscription) {
       this.isAuthSubscription.unsubscribe();
     }
   }

@@ -37,6 +37,7 @@ export class AuthService implements OnDestroy {
       oidc: false,
       logoutUrl: undefined,
       fallbackAccessTokenExpirationTimeInSec: 3600,
+      showDebugInformation: true
     }
 
     this.authSubscription = this.oAuthService.events.subscribe(async value => {
