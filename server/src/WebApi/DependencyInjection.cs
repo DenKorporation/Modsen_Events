@@ -85,6 +85,18 @@ public static class DependencyInjection
             });
         });
 
+        services.AddCors(corsOptions =>
+        {
+            corsOptions.AddPolicy("Angular Client",
+                policy =>
+                {
+                    policy
+                        .WithOrigins(configuration.GetRequiredSection("Clients:AngularUrl").Value!)
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+        });
+
         return services;
     }
 

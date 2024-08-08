@@ -1,0 +1,14 @@
+.error-dialog-title {
+  color: #f44336;
+}
+
+.error-dialog-content {
+  padding: 16px;
+  font-size: 16px;
+}
+
+.error-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 16px;
+}

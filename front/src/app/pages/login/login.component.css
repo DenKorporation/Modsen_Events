@@ -1,0 +1,42 @@
+section {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: darkgray no-repeat center;
+  background-size: cover;
+
+  & mat-card {
+    width: 500px;
+
+    & mat-card-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    & mat-card-actions {
+      display: flex;
+      flex-direction: column;
+
+
+      .sign-up a {
+        color: #ff8000;
+        text-decoration: none;
+      }
+
+      .sign-up a:hover {
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.mdc-button.mat-papaya:not(.mat-mdc-button-disabled) {
+  color: #ff8000;
+}
+
+.mdc-button.mat-papaya:hover {
+  background-color: #fbeddf;
+}

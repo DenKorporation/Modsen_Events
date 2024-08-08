@@ -14,6 +14,8 @@ var app = builder.Build();
 
 app.UseExceptionHandler();
 
+app.UseCors("Angular Client");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
