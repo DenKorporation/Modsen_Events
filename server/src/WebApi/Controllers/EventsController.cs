@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Application.UseCases.Events.Commands.CreateEvent;
 using Application.UseCases.Events.Commands.DeleteEvent;
 using Application.UseCases.Events.Commands.DeleteImage;
@@ -25,7 +26,8 @@ public class EventsController(ISender sender) : ControllerBase
     [HttpGet("{eventId:guid}")]
     public async Task<IResult> GetEventByIdAsync(Guid eventId, CancellationToken cancellationToken = default)
     {
-        var result = await sender.Send(new GetEventByIdQuery(eventId), cancellationToken);
+        var userId = new Guid(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "");
+        var result = await sender.Send(new GetEventByIdQuery(eventId, userId), cancellationToken);
 
         return result.ToAspResult(Results.Ok);
     }
@@ -34,7 +36,8 @@ public class EventsController(ISender sender) : ControllerBase
     [HttpGet("{name}")]
     public async Task<IResult> GetEventByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        var result = await sender.Send(new GetEventByNameQuery(name), cancellationToken);
+        var userId = new Guid(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "");
+        var result = await sender.Send(new GetEventByNameQuery(name, userId), cancellationToken);
 
         return result.ToAspResult(Results.Ok);
     }

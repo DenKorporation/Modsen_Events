@@ -2,4 +2,4 @@ using Application.Common.Interfaces.Messaging;
 
 namespace Application.UseCases.Events.Queries.GetEventByName;
 
-public record GetEventByNameQuery(string Name) : IQuery<EventResponse>;
+public record GetEventByNameQuery(string Name, Guid UserId) : IQuery<EventResponse>;

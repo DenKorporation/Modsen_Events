@@ -11,4 +11,5 @@ public class User : IdentityUser<Guid>
     public DateTime UpdatedAt { get; set; }
     public ICollection<Event> Events { get; set; } = null!;
     public ICollection<EventUser> EventUsers { get; set; } = null!;
+    public ICollection<IdentityRole<Guid>> Roles { get; set; } = null!;
 }

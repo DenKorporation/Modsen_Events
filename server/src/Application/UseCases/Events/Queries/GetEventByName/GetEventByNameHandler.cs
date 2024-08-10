@@ -24,6 +24,9 @@ public class GetEventByNameHandler(IMapper mapper, IUnitOfWork unitOfWork)
         result.PlacesOccupied = (uint)await unitOfWork.EventUserRepository
             .GetAllUsersFromEvent(result.Id)
             .CountAsync(cancellationToken);
+        
+        result.IsRegistered = await unitOfWork.EventUserRepository.GetAllUsersFromEvent(result.Id)
+            .AnyAsync(u => u.Id == request.UserId, cancellationToken);
 
         return result;
     }
