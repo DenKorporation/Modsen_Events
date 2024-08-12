@@ -5,18 +5,9 @@ section {
   justify-content: center;
   align-items: center;
 
-  background: darkgray;
-  background-size: cover;
-
-  .profile-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-
-  mat-card {
-    max-width: 400px;
-    width: 100%;
+  .profile-card {
+    width: 20%;
+    height: 25%;
   }
 }
 

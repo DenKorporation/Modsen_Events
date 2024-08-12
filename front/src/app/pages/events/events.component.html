@@ -1,1 +1,46 @@
-<p>events works!</p>
+<section class="events-container">
+  <app-event-list class="event-list-container"/>
+  <div class="filter-form-container">
+    <form [formGroup]="filterFormGroup">
+      <h2>Enter the search data</h2>
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput [formControl]="filterFormGroup.controls.name">
+        <mat-error *ngIf="filterFormGroup.controls.name.hasError('maxlength')">
+          Length of Name is no more than 100 characters
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Address</mat-label>
+        <input matInput [formControl]="filterFormGroup.controls.address">
+        <mat-error *ngIf="filterFormGroup.controls.address.hasError('maxlength')">
+          Length of Address is no more than 150 characters
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Category</mat-label>
+        <input matInput [formControl]="filterFormGroup.controls.category">
+        <mat-error *ngIf="filterFormGroup.controls.category.hasError('maxlength')">
+          Length of Category is no more than 50 characters
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="date-range-field">
+        <mat-label>Event Date</mat-label>
+        <mat-date-range-input [rangePicker]="drp">
+          <input matStartDate placeholder="Start Date" [formControl]="filterFormGroup.controls.startDate">
+          <input matEndDate placeholder="End Date" [formControl]="filterFormGroup.controls.endDate">
+        </mat-date-range-input>
+        <mat-hint>DD.MM.YYYY - DD.MM.YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="drp"></mat-datepicker-toggle>
+        <mat-date-range-picker #drp></mat-date-range-picker>
+      </mat-form-field>
+      <button
+        class="search-button"
+        mat-flat-button
+        (click)="searchData()"
+        [disabled]="this.filterFormGroup.invalid">
+        Search
+      </button>
+    </form>
+  </div>
+</section>

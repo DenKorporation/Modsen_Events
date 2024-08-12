@@ -2,13 +2,13 @@ import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {UserInfo} from "../../dtos/user/user-info";
 import {Subscription} from "rxjs";
 import {AuthService} from "../../services/auth.service";
-import {CommonModule, NgIf} from "@angular/common";
-import {MatCardModule} from "@angular/material/card";
+import {CommonModule} from "@angular/common";
+import {ProfileCardComponent} from "../common/profile-card/profile-card.component";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, NgIf, MatCardModule],
+  imports: [CommonModule, ProfileCardComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })

@@ -13,7 +13,7 @@ import {uppercaseValidator} from "../../validators/uppercase.validator";
 import {specialCharactersValidator} from "../../validators/special-characters.validator";
 import {Router, RouterLink} from "@angular/router";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {ErrorDialogComponent} from "../error-dialog/error-dialog/error-dialog.component";
+import {ErrorDialogComponent} from "../common/error-dialog/error-dialog.component";
 
 @Component({
   selector: 'app-login',

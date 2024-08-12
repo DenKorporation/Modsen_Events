@@ -1,12 +1,5 @@
-export interface UserEventResponse {
-  id: string;
-  name: string;
-  description: string;
-  date: string;
-  address: string;
-  category: string;
-  capacity: number;
-  image_url: string | null;
-  placesOccupied: number;
+import {EventResponse} from "../event/event-response";
+
+export interface UserEventResponse extends EventResponse{
   registrationDate: string | null;
 }

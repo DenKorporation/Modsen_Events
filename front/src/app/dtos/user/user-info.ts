@@ -1,10 +1,6 @@
 import {Role} from "../../enums/role";
+import {UserResponse} from "./user-response";
 
-export interface UserInfo {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
+export interface UserInfo extends UserResponse {
   role: Role;
-  birthdate: string;
 }

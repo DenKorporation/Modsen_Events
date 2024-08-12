@@ -4,7 +4,8 @@ section {
   display: flex;
   justify-content: center;
 
-  .event-list-container{
+  .event-card-container{
     width: 55%;
   }
 }
+

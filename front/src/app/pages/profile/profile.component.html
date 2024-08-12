@@ -1,12 +1,3 @@
 <section>
-  <mat-card *ngIf="userInfo !== null" class="user-info">
-    <mat-card-header>
-      <mat-card-title>{{ userInfo.firstName }} {{ userInfo.lastName }}</mat-card-title>
-      <mat-card-subtitle>{{ userInfo.role }}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <p><strong>Email:</strong> {{ userInfo.email }}</p>
-      <p><strong>Birthdate:</strong> {{ userInfo.birthdate | date:'longDate' }}</p>
-    </mat-card-content>
-  </mat-card>
+  <app-profile-card class="profile-card" [userResponse]="userInfo"/>
 </section>

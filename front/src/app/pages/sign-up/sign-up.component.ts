@@ -24,7 +24,7 @@ import _moment from 'moment';
 import {default as _rollupMoment} from 'moment';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatMomentDateModule, provideMomentDateAdapter} from "@angular/material-moment-adapter";
-import {ErrorDialogComponent} from "../error-dialog/error-dialog/error-dialog.component";
+import {ErrorDialogComponent} from "../common/error-dialog/error-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {CreateUser} from "../../dtos/user/create-user";
 

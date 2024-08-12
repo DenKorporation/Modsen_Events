@@ -1,0 +1,16 @@
+.event-list-container {
+  position: relative;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .card-container {
+    margin: 16px;
+  }
+
+  .card-paginator {
+    margin: 16px;
+  }
+}
+

@@ -1,0 +1,11 @@
+<mat-card *ngIf="userResponse !== null && userResponse !== undefined" class="user-info">
+  <mat-card-header>
+    <mat-card-title>{{ userResponse.firstName }} {{ userResponse.lastName }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content >
+    <p *ngIf="hasRole()"><strong>Role:</strong>{{ getRole() }}</p>
+    <p><strong>Email:</strong> {{ userResponse.email }}</p>
+    <p><strong>Birthdate:</strong> {{ userResponse.birthdate | date:'longDate' }}</p>
+    <p *ngIf="hasRegistrationDate()"><strong>Registration date:</strong>{{ getRegistrationDate() }}</p>
+  </mat-card-content>
+</mat-card>

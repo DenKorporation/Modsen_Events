@@ -1,0 +1,3 @@
+<section>
+  <app-event-card *ngIf="!isLoadingResults" (updateData)="onUpdateData()" class="event-card-container" [event]="data" [isDetailed]="true"/>
+</section>

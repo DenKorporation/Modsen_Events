@@ -6,6 +6,7 @@ import {BehaviorSubject, Subscription} from "rxjs";
 import {UserInfo} from "../dtos/user/user-info";
 import {UserService} from "./user.service";
 import {CreateUser} from "../dtos/user/create-user";
+import {Role} from "../enums/role";
 
 @Injectable({
   providedIn: 'root'
@@ -111,7 +112,7 @@ export class AuthService implements OnDestroy {
         firstName: claims['given_name'],
         lastName: claims['family_name'],
         email: claims['email'],
-        role: claims['role'],
+        role: claims['role'] as Role,
         birthdate: claims['birthdate']
       };
     } catch (error) {

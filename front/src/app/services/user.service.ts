@@ -7,6 +7,7 @@ import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {PagedList} from "../dtos/paged-list";
 import {Role} from "../enums/role";
 import {UserEventResponse} from "../dtos/user/user-event-response";
+import {UserInfo} from "../dtos/user/user-info";
 
 @Injectable({
   providedIn: 'root'
@@ -16,35 +17,35 @@ export class UserService {
 
   private httpClient = inject(HttpClient);
 
-  public getAllUsers(pageNumber: number, pageSize: number): Observable<PagedList<UserResponse>> {
+  public getAllUsers(pageNumber: number, pageSize: number): Promise<PagedList<UserInfo>> {
     const params: string[] = [`pageNumber=${pageNumber}`, `pageSize=${pageSize}`];
 
     const requestUrl = `${this.userApiUrl}?${params.join('&')}`;
 
-    return this.httpClient.get<PagedList<UserResponse>>(requestUrl).pipe(
+    return lastValueFrom(this.httpClient.get<PagedList<UserInfo>>(requestUrl).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(() => new Error(error.error.message ?? "Unknown error"));
-      }));
+      })));
   }
 
-  public getAllUserEvents(userId: string, pageNumber: number, pageSize: number): Observable<PagedList<UserEventResponse>> {
+  public getAllUserEvents(userId: string, pageNumber: number, pageSize: number): Promise<PagedList<UserEventResponse>> {
     const params: string[] = [`pageNumber=${pageNumber}`, `pageSize=${pageSize}`];
 
     const requestUrl = `${this.userApiUrl}/${userId}/events?${params.join('&')}`;
 
-    return this.httpClient.get<PagedList<UserEventResponse>>(requestUrl).pipe(
+    return lastValueFrom(this.httpClient.get<PagedList<UserEventResponse>>(requestUrl).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(() => new Error(error.error.message ?? "Unknown error"));
-      }));
+      })));
   }
 
-  public getUserById(userId: string): Observable<UserResponse> {
+  public getUserById(userId: string): Promise<UserResponse> {
     const requestUrl = `${this.userApiUrl}/${userId}`;
 
-    return this.httpClient.get<UserResponse>(requestUrl).pipe(
+    return lastValueFrom(this.httpClient.get<UserResponse>(requestUrl).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(() => new Error(error.error.message ?? "Unknown error"));
-      }));
+      })));
   }
 
   public createUser(request: CreateUser): Promise<UserResponse> {
@@ -56,40 +57,40 @@ export class UserService {
       })));
   }
 
-  public registerToEvent(userId: string, eventId: string): Observable<any> {
+  public registerToEvent(userId: string, eventId: string): Promise<any> {
     const requestUrl = `${this.userApiUrl}/${userId}/event/${eventId}`;
 
-    return this.httpClient.post<any>(requestUrl, null).pipe(
+    return lastValueFrom(this.httpClient.post<any>(requestUrl, null).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(() => new Error(error.error.message ?? "Unknown error"));
-      }));
+      })));
   }
 
-  public unregisterFromEvent(userId: string, eventId: string): Observable<any> {
+  public unregisterFromEvent(userId: string, eventId: string): Promise<any> {
     const requestUrl = `${this.userApiUrl}/${userId}/event/${eventId}`;
 
-    return this.httpClient.delete<any>(requestUrl).pipe(
+    return lastValueFrom(this.httpClient.delete<any>(requestUrl).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(() => new Error(error.error.message ?? "Unknown error"));
-      }));
+      })));
   }
 
 
-  public assignRoleToUser(id: number, role: Role): Observable<any> {
+  public assignRoleToUser(id: number, role: Role): Promise<any> {
     const requestUrl = `${this.userApiUrl}/${id}?role=${role}`;
 
-    return this.httpClient.put<any>(requestUrl, null).pipe(
+    return lastValueFrom(this.httpClient.put<any>(requestUrl, null).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(() => new Error(error.error.message ?? "Unknown error"));
-      }));
+      })));
   }
 
-  public deleteUser(id: number): Observable<any> {
+  public deleteUser(id: number): Promise<any> {
     const requestUrl = `${this.userApiUrl}/${id}`;
 
-    return this.httpClient.delete(requestUrl).pipe(
+    return lastValueFrom(this.httpClient.delete(requestUrl).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(() => new Error(error.error.message ?? "Unknown error"));
-      }));
+      })));
   }
 }
