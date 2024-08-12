@@ -3,6 +3,12 @@
     <span>Events</span>
     @if (isAuthorized) {
       <div>
+        @if (router.url === '/events') {
+          <button mat-button (click)="toCreateEventPage()">
+            <span>Create Event</span>
+            <mat-icon iconPositionEnd>event</mat-icon>
+          </button>
+        }
         <button mat-button [matMenuTriggerFor]="menu">
           <span>{{ userInfo?.firstName }}</span>
           <mat-icon iconPositionEnd>account_circle</mat-icon>

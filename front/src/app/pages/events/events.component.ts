@@ -46,8 +46,8 @@ export class EventsComponent {
     name: new FormControl('', [Validators.maxLength(100)]),
     address: new FormControl('', [Validators.maxLength(150)]),
     category: new FormControl('', [Validators.maxLength(50)]),
-    startDate: new FormControl(moment()),
-    endDate: new FormControl(moment()),
+    startDate: new FormControl<_moment.Moment | null>(null),
+    endDate: new FormControl<_moment.Moment | null>(null),
   });
 
   @ViewChild(EventListComponent) eventList!: EventListComponent;

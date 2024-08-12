@@ -18,7 +18,7 @@ import {
 } from "@angular/material/datepicker";
 import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 import {NgxMatTimepickerModule} from "ngx-mat-timepicker";
-import {MatCard, MatCardModule} from "@angular/material/card";
+import {MatCardModule} from "@angular/material/card";
 import {MatProgressBar} from "@angular/material/progress-bar";
 
 const moment = _rollupMoment || _moment;
@@ -66,7 +66,6 @@ export class UpdateEventDialogComponent {
   public event: EventResponse = inject(MAT_DIALOG_DATA);
 
   selectedFile: File | null = null;
-  uploading = false;
 
   updateEventFormGroup = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
@@ -74,7 +73,7 @@ export class UpdateEventDialogComponent {
     address: new FormControl('', [Validators.required, Validators.maxLength(150)]),
     category: new FormControl('', [Validators.required, Validators.maxLength(50)]),
     capacity: new FormControl(0, [Validators.required, Validators.min(0)]),
-    date: new FormControl(moment(), [Validators.required]),
+    date: new FormControl(moment(null), [Validators.required]),
     time: new FormControl('', [Validators.required])
   });
 

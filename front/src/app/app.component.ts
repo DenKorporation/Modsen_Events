@@ -34,7 +34,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private isAuthSubscription!: Subscription;
 
   private authService = inject(AuthService);
-  private router = inject(Router);
+  public router = inject(Router);
 
 
   ngOnInit(): void {
@@ -83,5 +83,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   toUserEvents() {
     this.router.navigate(['/my-events'])
+  }
+
+  toCreateEventPage() {
+    this.router.navigate(['/create-event']);
   }
 }

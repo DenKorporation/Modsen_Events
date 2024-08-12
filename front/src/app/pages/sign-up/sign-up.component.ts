@@ -73,7 +73,7 @@ export class SignUpComponent {
   signUpFormGroup = new FormGroup({
     firstName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
     lastName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
-    birthdate: new FormControl(moment(), [Validators.required]),
+    birthdate: new FormControl(moment(null), [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email, Validators.maxLength(256)]),
     password: new FormControl('',
       [
