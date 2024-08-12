@@ -1,6 +1,7 @@
 <section class="user-list-container">
   <div *ngFor="let user of data" class="card-container">
-    <app-profile-card [userResponse]="user" [isAdminPage]="true" (updateData)="onUpdateData()"/>
+    <app-profile-card [userResponse]="user" [isAdminPage]="isAdminPage" [isEventPage]="isEventPage" [eventId]="eventId"
+                      (updateData)="onUpdateData()"/>
   </div>
   <mat-paginator class="card-paginator" [length]="resultsLength" [pageSize]="10" [showFirstLastButtons]="true"
                  [hidePageSize]="true"></mat-paginator>

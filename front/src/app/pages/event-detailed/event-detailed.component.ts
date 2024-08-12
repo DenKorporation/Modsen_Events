@@ -1,14 +1,11 @@
-import {AfterViewInit, Component, EventEmitter, inject, Input, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, inject, ViewChild} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {EventCardComponent} from "../common/event-card/event-card.component";
 import {map, merge, startWith, switchMap} from "rxjs";
 import {EventService} from "../../services/event.service";
-import {UserService} from "../../services/user.service";
-import {FilterOptions} from "../../dtos/event/filter-options";
-import {EventResponse} from "../../dtos/event/event-response";
-import {MatPaginator} from "@angular/material/paginator";
 import {EventWithStatusResponse} from "../../dtos/event/event-with-status-response";
 import {CommonModule, NgIf} from "@angular/common";
+import {UserListComponent} from "../common/user-list/user-list.component";
 
 @Component({
   selector: 'app-event-detailed',
@@ -16,7 +13,8 @@ import {CommonModule, NgIf} from "@angular/common";
   imports: [
     CommonModule,
     EventCardComponent,
-    NgIf
+    NgIf,
+    UserListComponent
   ],
   templateUrl: './event-detailed.component.html',
   styleUrl: './event-detailed.component.css'
@@ -30,11 +28,15 @@ export class EventDetailedComponent implements AfterViewInit {
 
   refreshEvents = new EventEmitter<void>();
 
+  @ViewChild(UserListComponent) userList!: UserListComponent;
+
   isLoadingResults = true;
 
-  ngAfterViewInit() {
+  constructor() {
     this.eventId = this.route.snapshot.paramMap.get('id')!;
+  }
 
+  ngAfterViewInit() {
     const refreshEvent = this.refreshEvents.pipe(map(() => ({eventType: 'refresh'})));
 
     merge(refreshEvent)
@@ -62,7 +64,12 @@ export class EventDetailedComponent implements AfterViewInit {
       .subscribe(data => (this.data = data));
   }
 
-  onUpdateData() {
+  onEventUpdate() {
+    this.refreshEvents.emit();
+    this.userList.updateList();
+  }
+
+  onUserListUpdate() {
     this.refreshEvents.emit();
   }
 }

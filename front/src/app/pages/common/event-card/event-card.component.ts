@@ -81,10 +81,7 @@ export class EventCardComponent {
 
   register() {
     this.userService.registerToEvent(this.userId!, this.event?.id!).then(() => {
-      if (this.event !== undefined && this.event !== null) {
-        (this.event as EventWithStatusResponse).isRegistered = true;
-        this.event.placesOccupied++;
-      }
+      this.updateData.emit();
     }).catch((error) => {
       this.errorDialog.open(ErrorDialogComponent, {
         data: error.message
@@ -94,10 +91,7 @@ export class EventCardComponent {
 
   unregister() {
     this.userService.unregisterFromEvent(this.userId!, this.event?.id!).then(() => {
-      if (this.event !== undefined && this.event !== null) {
-        (this.event as EventWithStatusResponse).isRegistered = false;
-        this.event.placesOccupied--;
-      }
+      this.updateData.emit();
     }).catch((error) => {
       this.errorDialog.open(ErrorDialogComponent, {
         data: error.message

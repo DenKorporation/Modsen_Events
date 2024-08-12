@@ -33,6 +33,7 @@ export class ProfileCardComponent {
   @Input() userResponse: UserResponse | null = null;
   @Input() isAdminPage: boolean = false;
   @Input() isEventPage: boolean = false;
+  @Input() eventId: string | null = null;
 
   @Output() updateData = new EventEmitter();
 
@@ -86,5 +87,15 @@ export class ProfileCardComponent {
 
   isOwnCard() {
     return this.userResponse?.id === this.userId
+  }
+
+  unregister() {
+    this.userService.unregisterFromEvent(this.userResponse!.id, this.eventId!).then(() => {
+      this.updateData.emit();
+    }).catch((error) => {
+      this.errorDialog.open(ErrorDialogComponent, {
+        data: error.message
+      });
+    });
   }
 }

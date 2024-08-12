@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, inject, Input, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, inject, Input, Output, ViewChild} from '@angular/core';
 import {EventCardComponent} from "../event-card/event-card.component";
 import {MatPaginator} from "@angular/material/paginator";
 import {NgForOf} from "@angular/common";
@@ -25,6 +25,10 @@ export class UserListComponent implements AfterViewInit {
   private eventService = inject(EventService);
 
   @Input() eventId: string | null = null;
+  @Input() isAdminPage: boolean = false;
+  @Input() isEventPage: boolean = false
+
+  @Output() updateData = new EventEmitter<void>();
 
   refreshEvents = new EventEmitter<void>();
 
@@ -77,6 +81,11 @@ export class UserListComponent implements AfterViewInit {
   }
 
   onUpdateData() {
+    this.refreshEvents.emit();
+    this.updateData.emit();
+  }
+
+  updateList(){
     this.refreshEvents.emit();
   }
 }

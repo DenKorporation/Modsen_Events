@@ -18,4 +18,9 @@
               (click)="deleteUser()">Delete
       </button>
   </mat-card-actions>
+  <mat-card-actions class="card-actions" align="end" *ngIf="isEventPage && eventId !== null">
+    <button mat-flat-button color="warn"
+            (click)="unregister()">Unregister
+    </button>
+  </mat-card-actions>
 </mat-card>
