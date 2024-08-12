@@ -1,0 +1,15 @@
+.update-user-dialog-content {
+  padding: 16px;
+  font-size: 16px;
+  min-width: 300px;
+}
+
+.update-user-container {
+  width: 100%;
+}
+
+.update-user-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 16px;
+}

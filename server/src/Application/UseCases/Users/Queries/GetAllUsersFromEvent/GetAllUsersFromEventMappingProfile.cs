@@ -9,6 +9,7 @@ public class GetAllUsersFromEventMappingProfile : Profile
     {
         var eventId = Guid.Empty;
         CreateProjection<User, UserResponse>()
+            .ForMember(dest => dest.Birthdate, opt => opt.MapFrom(src => src.Birthday))
             .ForMember(ur => ur.RegistrationDate, opt => opt.MapFrom(src => src.EventUsers
                 .First(eu => eu.EventId == eventId).RegistrationDate));
     }

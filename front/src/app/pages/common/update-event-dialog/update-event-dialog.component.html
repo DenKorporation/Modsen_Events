@@ -1,0 +1,106 @@
+<h2 mat-dialog-title class="update-event-dialog-title">Update Event</h2>
+<mat-dialog-content class="update-event-dialog-content">
+  <div class="update-event-container">
+    <form [formGroup]="updateEventFormGroup" class="update-event-form">
+      <div class="update-event-container-left-column">
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput [formControl]="updateEventFormGroup.controls.name" required>
+          <mat-error *ngIf="updateEventFormGroup.controls.name.hasError('required')">
+            Name required
+          </mat-error>
+          <mat-error *ngIf="updateEventFormGroup.controls.name.hasError('maxlength')">
+            Length of Name is no more than 100 characters
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Category</mat-label>
+          <input matInput [formControl]="updateEventFormGroup.controls.category" required>
+          <mat-error *ngIf="updateEventFormGroup.controls.category.hasError('required')">
+            Category required
+          </mat-error>
+          <mat-error *ngIf="updateEventFormGroup.controls.category.hasError('maxlength')">
+            Length of Category is no more than 50 characters
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Address</mat-label>
+          <input matInput [formControl]="updateEventFormGroup.controls.address" required>
+          <mat-error *ngIf="updateEventFormGroup.controls.address.hasError('required')">
+            Address required
+          </mat-error>
+          <mat-error *ngIf="updateEventFormGroup.controls.address.hasError('maxlength')">
+            Length of Address is no more than 150 characters
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="update-event-description">
+          <mat-label>Description</mat-label>
+          <textarea matInput [formControl]="updateEventFormGroup.controls.description" required></textarea>
+          <mat-error *ngIf="updateEventFormGroup.controls.description.hasError('required')">
+            Description required
+          </mat-error>
+          <mat-error *ngIf="updateEventFormGroup.controls.description.hasError('maxlength')">
+            Length of Description is no more than 250 characters
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="update-event-container-right-column">
+        <mat-form-field>
+          <mat-label>Capacity</mat-label>
+          <input matInput type="number" [formControl]="updateEventFormGroup.controls.capacity" required>
+          <mat-error *ngIf="updateEventFormGroup.controls.capacity.hasError('required')">
+            Capacity required
+          </mat-error>
+          <mat-error *ngIf="updateEventFormGroup.controls.capacity.hasError('min')">
+            Capacity must be non negative
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Event Date</mat-label>
+          <input matInput [matDatepicker]="datepicker" [formControl]="updateEventFormGroup.controls.date" required/>
+          <mat-hint>DD.MM.YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+          <mat-datepicker #datepicker>
+            <mat-datepicker-actions>
+              <button mat-button matDatepickerCancel>Cancel</button>
+              <button mat-raised-button matDatepickerApply>Apply</button>
+            </mat-datepicker-actions>
+          </mat-datepicker>
+          <mat-error *ngIf="updateEventFormGroup.controls.date.hasError('required')">
+            Date of event required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Event Time</mat-label>
+          <input matInput [ngxMatTimepicker]="picker" [format]="24" [formControl]="updateEventFormGroup.controls.time"
+                 required/>
+          <mat-hint>HH:MM</mat-hint>
+          <ngx-mat-timepicker #picker></ngx-mat-timepicker>
+          <mat-error *ngIf="updateEventFormGroup.controls.time.hasError('required')">
+            Time of event required
+          </mat-error>
+        </mat-form-field>
+
+        <h6>Preview Image</h6>
+        <div class="image-input">
+          <input type="file" accept=".jpg,.jpeg,.png" (change)="onFileSelected($event)" hidden #fileInput/>
+          <button mat-flat-button color="primary" (click)="fileInput.click()">Choose file</button>
+          <span *ngIf="selectedFile">{{ selectedFile.name }}</span>
+        </div>
+        <div class="image-actions">
+          <button mat-flat-button (click)="updateImage()" [disabled]="!selectedFile">Update Image</button>
+          <button mat-flat-button class="delete-btn" (click)="deleteImage()" [disabled]="!event.imageUrl">Delete Image</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions class="update-event-dialog-actions">
+  <button mat-button (click)="updateEvent()" [disabled]="updateEventFormGroup.invalid">Ok</button>
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

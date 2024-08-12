@@ -11,6 +11,7 @@ public class Repository<TEntity>(AppDbContext dbContext) : IRepository<TEntity> 
         return Task.FromResult(dbContext
             .Set<TEntity>()
             .AsNoTracking()
+            .OrderBy(e => EF.Property<Guid>(e, "Id"))
             .AsQueryable());
     }
 

@@ -1,0 +1,15 @@
+main {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  & mat-toolbar {
+    min-height: 64px;
+    flex: initial;
+    justify-content: space-between;
+  }
+
+  & section {
+    flex: auto;
+  }
+}

@@ -1,0 +1,26 @@
+.object-card {
+  max-height: 100%;
+  margin: 16px auto;
+
+  .object-image {
+    width: 50%;
+    height: auto;
+    max-height: 200px;
+    object-fit: contain;
+  }
+
+  .detailed-actions-container {
+    display: flex;
+    justify-content: space-between;
+
+    .register-buttons {
+      display: flex;
+      gap: 20px;
+    }
+
+    .admin-buttons {
+      display: flex;
+      gap: 20px;
+    }
+  }
+}

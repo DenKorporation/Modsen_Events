@@ -11,4 +11,5 @@ public record EventResponse
     public uint Capacity { get; set; }
     public string? ImageUrl { get; set; }
     public uint PlacesOccupied { get; set; }
+    public bool IsRegistered { get; set; }
 }

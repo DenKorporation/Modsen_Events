@@ -11,14 +11,16 @@ public class EventUserRepository(AppDbContext dbContext) : IEventUserRepository
     {
         return dbContext.EventUsers
             .Where(eu => eu.EventId == eventId)
-            .Select(eu => eu.User);
+            .Select(eu => eu.User)
+            .OrderBy(u => u.Id);
     }
 
     public IQueryable<Event> GetAllEventsFromUser(Guid userId)
     {
         return dbContext.EventUsers
             .Where(eu => eu.UserId == userId)
-            .Select(eu => eu.Event);
+            .Select(eu => eu.Event)
+            .OrderBy(e => e.Id);
     }
 
     public async Task AddUserToEventAsync(Guid userId, Guid eventId, CancellationToken cancellationToken = default)

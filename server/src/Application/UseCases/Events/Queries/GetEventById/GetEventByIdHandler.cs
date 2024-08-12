@@ -20,10 +20,13 @@ public class GetEventByIdHandler(IMapper mapper, IUnitOfWork unitOfWork)
         }
 
         var result = mapper.Map<EventResponse>(resultEvent)!;
-        
+
         result.PlacesOccupied = (uint)await unitOfWork.EventUserRepository
             .GetAllUsersFromEvent(result.Id)
             .CountAsync(cancellationToken);
+
+        result.IsRegistered = await unitOfWork.EventUserRepository.GetAllUsersFromEvent(result.Id)
+            .AnyAsync(u => u.Id == request.UserId, cancellationToken);
 
         return result;
     }

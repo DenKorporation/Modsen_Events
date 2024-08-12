@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using Application.Services;
 using Domain.Entities;
 using Domain.Repositories;
+using Duende.IdentityServer.Services;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Infrastructure.Repositories;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Supabase;
 
@@ -25,6 +27,15 @@ public static class DependencyInjection
 
         services.AddIdentity<User, IdentityRole<Guid>>()
             .AddEntityFrameworkStores<AppDbContext>();
+
+        services.AddSingleton<ICorsPolicyService>(container =>
+        {
+            var logger = container.GetRequiredService<ILogger<DefaultCorsPolicyService>>();
+            return new DefaultCorsPolicyService(logger)
+            {
+                AllowedOrigins = { configuration.GetRequiredSection("Clients:AngularUrl").Value! }
+            };
+        });
 
         services
             .AddIdentityServer()

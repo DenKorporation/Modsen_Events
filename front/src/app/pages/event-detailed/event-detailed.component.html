@@ -1,0 +1,5 @@
+<section>
+  <app-event-card *ngIf="!isLoadingResults" (updateData)="onEventUpdate()" class="event-card-container" [event]="data" [isDetailed]="true"/>
+  <h3 *ngIf="isAdmin()">Registered Users</h3>
+  <app-user-list *ngIf="isAdmin()" class="user-list-container" (updateData)="onUserListUpdate()" [isEventPage]="true" [eventId]="eventId"/>
+</section>

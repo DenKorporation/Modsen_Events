@@ -1,0 +1,26 @@
+<mat-card *ngIf="userResponse !== null && userResponse !== undefined" class="user-info">
+  <mat-card-header>
+    <mat-card-title>{{ userResponse.firstName }} {{ userResponse.lastName }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content >
+    <p *ngIf="hasRole()"><strong>Role:</strong> {{ getRole() }}</p>
+    <p><strong>Email:</strong> {{ userResponse.email }}</p>
+    <p><strong>Birthdate:</strong> {{ userResponse.birthdate | date:'longDate' }}</p>
+    <p *ngIf="hasRegistrationDate()"><strong>Registration date:</strong> {{ getRegistrationDate() | date:'longDate' }}</p>
+  </mat-card-content>
+  <mat-card-actions class="card-actions" align="end" *ngIf="isAdminPage">
+      <button mat-flat-button
+              [disabled]="isOwnCard()"
+              (click)="changeRole()">Change role
+      </button>
+      <button mat-flat-button color="warn"
+              [disabled]="isOwnCard()"
+              (click)="deleteUser()">Delete
+      </button>
+  </mat-card-actions>
+  <mat-card-actions class="card-actions" align="end" *ngIf="isEventPage && eventId !== null">
+    <button mat-flat-button color="warn"
+            (click)="unregister()">Unregister
+    </button>
+  </mat-card-actions>
+</mat-card>

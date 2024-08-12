@@ -1,0 +1,44 @@
+<main>
+  <mat-toolbar>
+    <span>Events</span>
+    @if (isAuthorized) {
+      <div>
+        @if (router.url === '/events' && isAdmin()) {
+          <button mat-button (click)="toCreateEventPage()">
+            <span>Create Event</span>
+            <mat-icon iconPositionEnd>event</mat-icon>
+          </button>
+        }
+        <button mat-button [matMenuTriggerFor]="menu">
+          <span>{{ userInfo?.firstName }}</span>
+          <mat-icon iconPositionEnd>account_circle</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="toProfilePage()">
+            <mat-icon>account_circle</mat-icon>
+            <span>Profile</span>
+          </button>
+          <button mat-menu-item (click)="toUsersPage()" *ngIf="isAdmin()">
+            <mat-icon>group</mat-icon>
+            <span>Users</span>
+          </button>
+          <button mat-menu-item (click)="toEventsPage()">
+            <mat-icon>event</mat-icon>
+            <span>Events</span>
+          </button>
+          <button mat-menu-item (click)="toUserEvents()">
+            <mat-icon>bookmark</mat-icon>
+            <span>My Events</span>
+          </button>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </div>
+    }
+  </mat-toolbar>
+  <section>
+    <router-outlet/>
+  </section>
+</main>
