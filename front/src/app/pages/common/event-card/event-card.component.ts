@@ -13,7 +13,7 @@ import {ErrorDialogComponent} from "../error-dialog/error-dialog.component";
 import {Role} from "../../../enums/role";
 import {EventService} from "../../../services/event.service";
 import {UpdateEventDialogComponent} from "../update-event-dialog/update-event-dialog.component";
-import {timestamp} from "rxjs";
+import moment from "moment";
 
 @Component({
   selector: 'app-event-card',
@@ -131,6 +131,10 @@ export class EventCardComponent {
     return false;
   }
 
-  protected readonly timestamp = timestamp;
+  formatDate(): string {
+    let momentDate = moment(this.event?.date, 'YYYY-MM-DDTHH:mm:ss');
+    return momentDate.format('MMMM D, YYYY H:mm');
+  }
+
   protected readonly Date = Date;
 }

@@ -6,6 +6,8 @@ import {EventService} from "../../services/event.service";
 import {EventWithStatusResponse} from "../../dtos/event/event-with-status-response";
 import {CommonModule, NgIf} from "@angular/common";
 import {UserListComponent} from "../common/user-list/user-list.component";
+import {Role} from "../../enums/role";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-event-detailed',
@@ -21,6 +23,7 @@ import {UserListComponent} from "../common/user-list/user-list.component";
 })
 export class EventDetailedComponent implements AfterViewInit {
   private eventService = inject(EventService);
+  private authService = inject(AuthService);
   private route = inject(ActivatedRoute);
 
   eventId: string = '';
@@ -62,6 +65,10 @@ export class EventDetailedComponent implements AfterViewInit {
         }),
       )
       .subscribe(data => (this.data = data));
+  }
+
+  isAdmin(){
+    return this.authService.role === Role.Administrator;
   }
 
   onEventUpdate() {

@@ -8,6 +8,7 @@ import {Subscription} from "rxjs";
 import {AuthService} from "./services/auth.service";
 import {MatIconModule} from "@angular/material/icon";
 import {MatMenuModule} from "@angular/material/menu";
+import {Role} from "./enums/role";
 
 @Component({
   selector: 'app-root',
@@ -71,6 +72,10 @@ export class AppComponent implements OnInit, OnDestroy {
     if (!isSignInUpPage && !this.isAuthorized) {
       this.router.navigate(['/login']);
     }
+  }
+
+  isAdmin(){
+    return this.authService.role === Role.Administrator;
   }
 
   toEventsPage() {

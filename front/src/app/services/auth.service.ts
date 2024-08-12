@@ -1,6 +1,5 @@
 import {inject, Injectable, OnDestroy} from '@angular/core';
 import {AuthConfig, OAuthInfoEvent, OAuthService} from "angular-oauth2-oidc";
-import {Router} from "@angular/router";
 import {environment} from "../../environments/environment";
 import {BehaviorSubject, Subscription} from "rxjs";
 import {UserInfo} from "../dtos/user/user-info";
@@ -22,6 +21,10 @@ export class AuthService implements OnDestroy {
   isAuthorized$ = this.isAuthorizedSubject.asObservable();
 
   private authSubscription!: Subscription;
+
+  constructor() {
+    this.updateAuthStatus();
+  }
 
   ngOnDestroy(): void {
     if (this.authSubscription) {

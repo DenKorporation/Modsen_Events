@@ -10,8 +10,8 @@ import {CreateEventComponent} from "./pages/create-event/create-event.component"
 import {UsersComponent} from "./pages/users/users.component";
 
 export const routes: Routes = [
-  {path: 'login', component: LoginComponent},
-  {path: 'sign-up', component: SignUpComponent},
+  {path: 'login', component: LoginComponent, canActivate: [authGuard]},
+  {path: 'sign-up', component: SignUpComponent, canActivate: [authGuard]},
   {path: 'events', component: EventsComponent, canActivate: [authGuard]},
   {path: 'event/:id', component: EventDetailedComponent, canActivate: [authGuard]},
   {path: 'create-event', component: CreateEventComponent, canActivate: [authGuard]},

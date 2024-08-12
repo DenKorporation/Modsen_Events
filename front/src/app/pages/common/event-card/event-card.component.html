@@ -4,17 +4,14 @@
       <mat-card-title>{{ event?.name }}</mat-card-title>
       <mat-card-subtitle>
         <p>{{ event?.category }}</p>
-        <p><strong>Date:</strong> {{ event?.date }}</p>
+        <p><strong>Date:</strong> {{ formatDate() }}</p>
         <p><strong>Address:</strong> {{ event?.address }}</p>
         <p><strong>Capacity:</strong> {{ event?.capacity }}</p>
         <p><strong>Places Occupied:</strong> {{ event?.placesOccupied }}</p>
-        <p *ngIf="hasRegistrationDate()"><strong>RegistrationDate:</strong> {{ getRegistrationDate() }}</p>
+        <p *ngIf="hasRegistrationDate()"><strong>RegistrationDate:</strong> {{ getRegistrationDate() | date:'longDate'}}</p>
       </mat-card-subtitle>
-      <img mat-card-md-image *ngIf="hasImage" [src]="event?.imageUrl" alt="Image"
+      <img mat-card-md-image *ngIf="hasImage" [src]="event?.imageUrl + '?timestamp=' + Date.now()" alt="Image"
            class="object-image"/>
-<!--      TODO invalidating cache-->
-<!--      <img mat-card-md-image *ngIf="hasImage" [src]="event?.imageUrl + '?timestamp=' + Date.now()" alt="Image"-->
-<!--           class="object-image"/>-->
     </mat-card-title-group>
   </mat-card-header>
 
