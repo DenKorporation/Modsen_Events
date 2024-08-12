@@ -6,7 +6,7 @@ import {MatButton} from "@angular/material/button";
 import {UserInfo} from "./dtos/user/user-info";
 import {Subscription} from "rxjs";
 import {AuthService} from "./services/auth.service";
-import {MatIcon, MatIconModule} from "@angular/material/icon";
+import {MatIconModule} from "@angular/material/icon";
 import {MatMenuModule} from "@angular/material/menu";
 
 @Component({
@@ -82,10 +82,14 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   toUserEvents() {
-    this.router.navigate(['/my-events'])
+    this.router.navigate(['/my-events']);
   }
 
   toCreateEventPage() {
     this.router.navigate(['/create-event']);
+  }
+
+  toUsersPage() {
+    this.router.navigate(['/users'])
   }
 }

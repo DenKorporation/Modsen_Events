@@ -21,10 +21,6 @@
     .admin-buttons {
       display: flex;
       gap: 20px;
-
-      .delete-btn {
-        background-color: #f44336;
-      }
     }
   }
 }

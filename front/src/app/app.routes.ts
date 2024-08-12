@@ -7,6 +7,7 @@ import {UserEventsComponent} from "./pages/user-events/user-events.component";
 import {EventsComponent} from "./pages/events/events.component";
 import {EventDetailedComponent} from "./pages/event-detailed/event-detailed.component";
 import {CreateEventComponent} from "./pages/create-event/create-event.component";
+import {UsersComponent} from "./pages/users/users.component";
 
 export const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -15,6 +16,7 @@ export const routes: Routes = [
   {path: 'event/:id', component: EventDetailedComponent, canActivate: [authGuard]},
   {path: 'create-event', component: CreateEventComponent, canActivate: [authGuard]},
   {path: 'profile', component: ProfileComponent, canActivate: [authGuard]},
+  {path: 'users', component: UsersComponent, canActivate: [authGuard]},
   {path: 'my-events', component: UserEventsComponent, canActivate: [authGuard]},
   {path: '', redirectTo: '/login', pathMatch: "full"},
   {path: '**', redirectTo: '/login'},

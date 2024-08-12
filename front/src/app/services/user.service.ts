@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {CreateUser} from "../dtos/user/create-user";
-import {catchError, lastValueFrom, Observable, throwError} from "rxjs";
+import {catchError, lastValueFrom, throwError} from "rxjs";
 import {UserResponse} from "../dtos/user/user-response";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {PagedList} from "../dtos/paged-list";
@@ -76,7 +76,7 @@ export class UserService {
   }
 
 
-  public assignRoleToUser(id: number, role: Role): Promise<any> {
+  public assignRoleToUser(id: string, role: Role): Promise<any> {
     const requestUrl = `${this.userApiUrl}/${id}?role=${role}`;
 
     return lastValueFrom(this.httpClient.put<any>(requestUrl, null).pipe(
@@ -85,7 +85,7 @@ export class UserService {
       })));
   }
 
-  public deleteUser(id: number): Promise<any> {
+  public deleteUser(id: string): Promise<any> {
     const requestUrl = `${this.userApiUrl}/${id}`;
 
     return lastValueFrom(this.httpClient.delete(requestUrl).pipe(

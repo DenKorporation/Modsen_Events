@@ -1,0 +1,18 @@
+<h2 mat-dialog-title class="update-user-dialog-title">Change Role</h2>
+<mat-dialog-content class="update-user-dialog-content">
+    <mat-form-field class="update-user-container">
+      <mat-label>Role</mat-label>
+      <mat-select [formControl]="formGroup.controls.role" required>
+        @for (role of userRoles; track role) {
+          <mat-option [value]="role">{{role.name}}</mat-option>
+        }
+      </mat-select>
+      <mat-error *ngIf="formGroup.controls.role.hasError('required')">
+        Role required
+      </mat-error>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions class="update-user-dialog-actions">
+  <button mat-button (click)="changeRole()" [disabled]="formGroup.invalid">Ok</button>
+  <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>
