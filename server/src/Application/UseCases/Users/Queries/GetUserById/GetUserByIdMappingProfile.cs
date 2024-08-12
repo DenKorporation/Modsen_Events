@@ -7,6 +7,7 @@ public class GetUserByIdMappingProfile : Profile
 {
     public GetUserByIdMappingProfile()
     {
-        CreateMap<User, UserResponse>();
+        CreateMap<User, UserResponse>()
+            .ForMember(dest => dest.Birthdate, opt => opt.MapFrom(src => src.Birthday));
     }
 }
