@@ -21,6 +21,9 @@
 
    - swagger: http://localhost:5000/swagger/index.html
    - angular client: http://localhost:4200
+   - Предустановленный админ
+        - admin@example.com
+        - Pass123$
 
 ---
 
