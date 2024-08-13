@@ -10,7 +10,7 @@
 2. Перейти в папку с docker-compose.yml
 
    ```shell
-   cd docker
+   cd modsen_events/docker
    
 3. Запустить docker-compose.yml
 
